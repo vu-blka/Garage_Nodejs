@@ -3,7 +3,16 @@ const app = express();
 const router = express.Router();
 const productController = require('../app/controllers/ProductController');
 
-router.get('/', productController.getAll);
+//GET
+router.get('/get-all', productController.getAll);
+router.get('/get-product-by-id', productController.getProductById);
+router.get('/get-product-by-type', productController.getProductByType);
+router.get(
+    '/get-product-by-manufacturer',
+    productController.getProductByManufacturer
+);
+
+//POST
 router.post('/create', productController.create);
 
 // router.get('/:id', (req, res, next) => res.send('Lay 1 item co id = ' + req.params.id))
