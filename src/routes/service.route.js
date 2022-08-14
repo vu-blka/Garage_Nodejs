@@ -6,6 +6,6 @@ router.get('/get-all', serviceController.getAll);
 router.get('/get-service-by-id', serviceController.getServiceById);
 router.get('/get-service-by-type', serviceController.getServiceByType);
 
-router.post('/create', serviceController.createService);
+router.post('/create', serviceController.create);
 
 module.exports = router;

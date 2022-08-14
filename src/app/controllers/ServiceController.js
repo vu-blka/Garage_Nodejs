@@ -4,16 +4,38 @@ const ServiceType = require('../models/ServiceType.model');
 class ServiceController {
     // [GET] api/service/get-all
     getAll(req, res, next) {
-        Service.find({})
-            .populate({
-                path: 'serviceTypeId',
-                select: '-_id -__v',
-            })
-            .select('-__v -description ')
-            .then((service) => {
-                res.send(service);
-            })
-            .catch((err) => res.send(error));
+        // Service.find({})
+        //     .populate({
+        //         path: 'serviceTypeId',
+        //         select: '-_id -__v',
+        //     })
+        //     .select('-__v -description ')
+        //     .then((service) => {
+        //         res.send(service);
+        //     })
+        //     .catch((err) => res.send(error));
+
+        Service.aggregate([
+            {
+                $lookup: {
+                    from: 'descriptions',
+                    localField: '_id',
+                    foreignField: 'refId',
+                    as: 'description',
+                },
+            },
+        ]).exec(function (error, product) {
+            res.status(200).send(product);
+        });
+        // .populate({
+        //     path: 'serviceTypeId',
+        //     select: '-_id -__v',
+        // })
+        // .select('-__v -description ')
+        // .then((service) => {
+        //     res.send(service);
+        // })
+        // .catch((err) => res.send(error));
     }
 
     // [GET] api/service/get-service-by-id
@@ -76,7 +98,7 @@ class ServiceController {
     }
 
     // [POST] api/service/create
-    createService(req, res, next) {
+    create(req, res, next) {
         const service = new Service(req.body);
         service
             .save()

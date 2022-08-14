@@ -17,7 +17,7 @@ class AccountController {
                         {
                             username: info.username,
                             accountId: info.accountId,
-                            _id: info._id
+                            _id: info._id,
                         },
                         'RESTFULAPIs'
                     );

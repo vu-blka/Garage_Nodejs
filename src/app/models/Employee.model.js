@@ -7,6 +7,7 @@ const Employee = new Schema({
     dob: { type: Date },
     email: { type: String },
     phoneNumber: { type: String },
+	address: {type: String},
     accountId: { type: Schema.Types.ObjectId, ref: 'Account' },
 });
 

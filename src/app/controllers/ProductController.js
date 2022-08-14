@@ -1,18 +1,44 @@
 const Product = require('../models/Product.model');
+const Description = require('../models/Description.model');
 const ProductType = require('../models/ProductType.model');
 const Manufacturer = require('../models/Manufacturer.model');
 
 class ProductController {
     //  [GET] /api/product/get-all
     getAll(req, res, next) {
-        Product.find({})
-            .populate({ path: 'manufacturerId', select: '-__v -_id' })
-            .populate({ path: 'productTypeId', select: '-__v -_id' })
-            .select('-__v -description')
-            .then((product) => {
-                res.send(product);
+        // Product.find({})
+        //     .populate({ path: 'manufacturerId', select: '-__v -_id' })
+        //     .populate({ path: 'productTypeId', select: '-__v -_id' })
+        //     .select('-__v -description')
+        //     .then((product) => {
+        //         res.send(product);
+        //     })
+        //     .catch((error) => res.send(error));
+
+        Product.aggregate([
+            {
+                $lookup: {
+                    from: 'descriptions',
+                    localField: '_id',
+                    foreignField: 'refId',
+                    as: 'description',
+                },
+            },
+        ]).exec(function (error, product) {
+            Product.populate(product, {
+                path: 'manufacturerId productTypeId',
+                select: '-__v -_id',
             })
-            .catch((error) => res.send(error));
+                .then((p) => res.status(200).send(p))
+                .catch((error) => res.status(401).send(error));
+        });
+        // .populate({ path: 'manufacturerId', select: '-__v -_id' })
+        // .populate({ path: 'productTypeId', select: '-__v -_id' })
+        // .select('-__v -description')
+        // .then((product) => {
+        //     res.send(product);
+        // })
+        // .catch((error) => res.send(error));
     }
 
     //  [GET] /api/product/get-product-by-id
