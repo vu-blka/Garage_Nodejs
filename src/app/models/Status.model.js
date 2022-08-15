@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const Status = new Schema({
-    statusId: { type: String },
+    statusId: { type: Number, unique: true },
     statusName: { type: String },
 });
 
-module.exports = Schema.model('Status', Status);
+module.exports = mongoose.model('Status', Status);

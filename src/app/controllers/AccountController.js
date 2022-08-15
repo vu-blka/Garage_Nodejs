@@ -2,14 +2,21 @@ const Account = require('../models/Account.model');
 const jwt = require('jsonwebtoken');
 
 class AccountController {
-    //  [GET] /api/account/signin
+    // [GET] /api/account/get-all
+    getAll(req, res, next) {
+        Account.find({})
+            .then((account) => res.status(200).send(account))
+            .catch((error) => res.status(401).send(error));
+    }
+
+    //  [POST] /api/account/signin
     signin(req, res, next) {
         Account.findOne({
             username: req.body.username,
             password: req.body.password,
         })
             .populate({ path: 'role', select: 'roleName -_id' })
-            .select('-password')
+            .select('-password -ownerId -__v')
 
             .then((info) => {
                 if (info) {

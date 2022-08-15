@@ -5,6 +5,14 @@ const jsonwebtoken = require('jsonwebtoken');
 const ObjectId = require('mongodb').ObjectID;
 
 class UserController {
+    // [GET] api/user/get-all
+    getAll(req, res, next) {
+        User.find({})
+            .select('-__v')
+            .then((user) => res.status(200).send(user))
+            .catch((error) => res.status(401).send(error));
+    }
+
     //  [GET] api/user/getUserInfo
     getUserInfo(req, res, next) {
         const authorizationClient = req.headers['authorization'];
@@ -16,18 +24,18 @@ class UserController {
         if (token && bearer) {
             jsonwebtoken.verify(token, 'RESTFULAPIs', function (err, decode) {
                 if (err) req.user = undefined;
-                const idMap = decode._id;
+                const idMap = decode?._id;
                 User.findOne({ account: idMap })
                     .select('-__v')
-                    .populate({
-                        path: 'account',
-                        select: 'accountId username -_id',
-                        populate: { path: 'role', select: 'roleName -_id' },
-                    })
+                    // .populate({
+                    //     path: 'accountId',
+                    //     select: 'accountId username -_id',
+                    //     populate: { path: 'role', select: 'roleName -_id' },
+                    // })
                     .then((user) => {
-                        res.send(user);
+                        res.status(200).send(user);
                     })
-                    .catch((error) => res.send(error));
+                    .catch((error) => res.status(401).send(error));
             });
         } else {
             res.status(401).send();
@@ -36,29 +44,34 @@ class UserController {
 
     //  [POST] /api/user/add
     create(req, res, next) {
-        const user = new User(req.body);
-        user.save()
-            .then(() => {
-                res.status(200).send('Them user thanh cong!');
-            })
-            .catch((error) => res.send(error));
+        const data = req?.body;
+        if (JSON.stringify(data) === '{}') {
+            res.status(401).send('Data rong');
+        } else {
+            const user = new User(data);
+            user.save()
+                .then(() => res.status(200).send('Them user thanh cong'))
+                .catch((error) => {
+                    res.status(401).send(error);
+                });
+        }
     }
 
     //  [PATCH] /api/user/update
     async update(req, res, next) {
         const id = req.params?.id;
-        const user = req.body;
+        const user = req?.body;
         if (!id || JSON.stringify(user) === '{}')
             res.status(401).send(
-                'Thieu param/body hoac ten param sai (id). Truyen (_id) nhé'
+                'Thieu param/body hoac ten param sai. Truyen idCardNumber'
             );
         else {
             const count = await User.countDocuments({
-                _id: new ObjectId(id),
+                idCardNumber: id,
             }).exec();
 
             if (count > 0) {
-                User.updateOne({ _id: new ObjectId(id) }, user)
+                User.updateOne({ idCardNumber: id }, user)
                     .then(() => {
                         res.status(200).send('Sua thong tin thanh cong');
                     })
@@ -66,11 +79,26 @@ class UserController {
             } else {
                 res.status(401).send('Khong ton tai user co ma id nay');
             }
-            // user.updateOne({}, user)
-            //     .then(() => {
-            //         res.status(200).send('Them user thanh cong!');
-            //     })
-            //     .catch((error) => res.send(error));
+        }
+    }
+
+    // [DELETE] /api/user/delete/:id (idCardNumber)
+    delete(req, res, next) {
+        const param = req?.params?.id;
+        if (!param) {
+            res.status(401).send('Khong co param');
+        } else {
+            User.countDocuments({ idCardNumber: param }).then((count) => {
+                if (count > 0) {
+                    User.delete({ idCardNumber: param })
+                        .then(() => res.status(200).send('Xoa user thanh cong'))
+                        .catch((error) => res.status(401).send(error));
+                } else {
+                    res.status(401).send(
+                        'Khong co user co ma idCardNumber nay'
+                    );
+                }
+            });
         }
     }
 }

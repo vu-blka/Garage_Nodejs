@@ -13,6 +13,7 @@ const Account = new Schema({
     username: { type: String, unique: true },
     password: { type: String },
     role: { type: Schema.Types.ObjectId, ref: 'Role' },
+    ownerId: { type: Schema.Types.ObjectId, ref: 'User' },
 });
 
 Account.plugin(autoIncrement.plugin, { model: 'Account', field: 'accountId' });
