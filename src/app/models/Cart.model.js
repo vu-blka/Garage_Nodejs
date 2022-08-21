@@ -8,8 +8,6 @@ const Cart = new Schema({
     totalPrice: { type: Number },
     statusId: { type: Schema.Types.ObjectId, ref: 'Status' },
     idUser: { type: Schema.Types.ObjectId, ref: 'User' },
-    // shipperEmployeeId: {type: Schema.Types.ObjectId, ref: 'Employee' },
-    // browseEmployeeId: {type: Schema.Types.ObjectId, ref: 'Employee' },
     deleted: { type: Boolean },
     deletedAt: { type: String },
 });

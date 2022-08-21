@@ -9,6 +9,7 @@ const account = require('./account.route');
 const description = require('./description.route');
 const productType = require('./productType.route');
 const serviceType = require('./serviceType.route');
+const cartDescription = require('./cartDescription.route');
 const saleDescription = require('./saleDescription.route');
 const manufacturer = require('./manufacturer.route');
 
@@ -23,6 +24,7 @@ function route(app) {
   app.use('/api/account', account);
   app.use('/api/description', description);
   app.use('/api/serviceType', serviceType);
+  app.use('/api/cartDescription', cartDescription);
   app.use('/api/saleDescription', saleDescription);
   app.use('/api/productType', productType);
   app.use('/api/manufacturer', manufacturer);

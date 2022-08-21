@@ -1,5 +1,6 @@
 const Cart = require('../models/Cart.model');
 const Status = require('../models/Status.model');
+const CartDescription = require('../models/CartDescription.model');
 
 class CartController {
     //  [GET] /api/cart/get-all
@@ -21,21 +22,33 @@ class CartController {
         if (JSON.stringify(data) === '{}' || !data) {
             res.status(401).send('Thieu data');
         } else {
-            const cart = new Cart(data);
-            cart.cartId = 1;
+		    const cart = new Cart(data);
+            //cart.cartId = 1;
             cart.createAt = new Date();
-            cart.totalPrice = 1500000;
             cart.statusId = '62fa16af20d59d057db12c05';
-            // const products = data?.products;
-            // const services = data?.services;
+			const products = data?.products;
+			const services = data?.services;
+			const cartDes = new CartDescription();
             cart.save()
-                .then(() => {
-                    // if (Array.isArray(products)) {
-                    //     product.map;
-                    // }
-                    res.status(200).send('Them vao gio hang thanh cong!');
+                .then((cart) => {
+                    const cartId = cart._id;
+					cartDes.cartId = cartId;
+					cartDes.products = products;
+					cartDes.services = services;
+					cartDes.save()
+						.then(() => {
+							res.status(200).send('Thêm vào giỏ hàng thành công')
+						})
+						.catch((error) => {
+							console.log(error);
+							res.status(401).send(error)
+						})
                 })
-                .catch((error) => res.send(error));
+                .catch((error) => {
+					console.log(error);
+					res.status(401).send(error);
+				}
+				);
         }
     }
 

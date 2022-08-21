@@ -13,6 +13,7 @@ router.post('/create', userController.create);
 router.delete('/delete/:id', userController.delete);
 
 //PATCH
-router.patch('/update/:id', userController.update);
+router.patch('/update', userController.update);
+router.patch('/updatePassword', userController.updatePass);
 
 module.exports = router;
