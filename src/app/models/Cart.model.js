@@ -7,6 +7,7 @@ const Cart = new Schema({
     createAt: { type: Date },
     totalPrice: { type: Number },
     statusId: { type: Schema.Types.ObjectId, ref: 'Status' },
+    afterPrice: { type: Number },
     idUser: { type: Schema.Types.ObjectId, ref: 'User' },
     deleted: { type: Boolean },
     deletedAt: { type: String },

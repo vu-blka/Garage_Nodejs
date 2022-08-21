@@ -7,7 +7,12 @@ router.get('/get-all', cartDescriptionController.getAll);
 router.get('/get-cartdes-by-id', cartDescriptionController.getById);
 
 // POST
-//router.post('/create', cartDescriptionController.create);
+router.patch('/add', cartDescriptionController.add);
 
+// PATCH
+router.patch('/confirm', cartDescriptionController.confirm);
+
+// DELETE
+router.delete('/delete/', cartDescriptionController.delete);
 
 module.exports = router;

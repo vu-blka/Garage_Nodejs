@@ -4,6 +4,7 @@ const userController = require('../app/controllers/UserController');
 
 //GET
 router.get('/get-all', userController.getAll);
+router.get('/get-all-user', userController.getAllUser);
 router.get('/get-user-info', userController.getUserInfo);
 
 //POST
