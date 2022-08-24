@@ -14,6 +14,6 @@ router.post('/create', serviceController.create);
 router.delete('/delete/:id', serviceController.delete);
 
 // PATCH
-router.patch('/update/:id', serviceController.update);
+router.patch('/update', serviceController.update);
 
 module.exports = router;

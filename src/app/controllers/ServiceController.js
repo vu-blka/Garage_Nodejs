@@ -146,13 +146,6 @@ class ServiceController {
 
     // [POST] api/service/create
     create(req, res, next) {
-        // const service = new Service(req.body);
-        // service
-        //     .save()
-        //     .then(() => {
-        //         res.status(200).send('Them service thanh cong!');
-        //     })
-        //     .catch((error) => res.send(error));
         const data = req?.body;
         if (JSON.stringify(data) === '{}') {
             res.status(401).send('Data rong');
@@ -208,14 +201,16 @@ class ServiceController {
                     if (count > 0) {
                         Service.delete({ serviceId: param })
                             .then(() => {
-                                res.status(200).send('Xoa dich vu thanh cong');
+                                res.status(200).send('Xóa dịch vụ thành công');
                             })
                             .catch((error) =>
-                                res.status(401).send('Loi khi xoa')
+                                res
+                                    .status(401)
+                                    .send('Đã xảy ra lỗi khi xóa dịch vụ')
                             );
                     } else {
                         res.status(401).send(
-                            'Khong co dich vu nay hoac dich vu da bi xoa'
+                            'Không có dịch vụ này hoặc dịch vụ này đã bị xóa'
                         );
                     }
                 })
@@ -223,9 +218,9 @@ class ServiceController {
         }
     }
 
-    //[UPDATE] /api/service/update/:id
+    //[UPDATE] /api/service/update
     update(req, res, next) {
-        const param = req?.params?.id;
+        const param = req?.body?.serviceId;
         if (!param) {
             res.status(401).send('Khong co param');
         } else {
@@ -235,7 +230,7 @@ class ServiceController {
                     if (JSON.stringify(body) !== '{}') {
                         Service.updateOne({ serviceId: param }, body)
                             .then(() => {
-                                res.status(200).send('Sua service thanh cong');
+                                res.status(200).send('Sửa service thành công');
                             })
                             .catch((error) => res.status(401).send(error));
                     } else {

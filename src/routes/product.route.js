@@ -19,7 +19,7 @@ router.post('/create', productController.create);
 router.delete('/delete/:id', productController.delete);
 
 //PATCH
-router.patch('/update/:id', productController.update);
+router.patch('/update', productController.update);
 
 // router.get('/:id', (req, res, next) => res.send('Lay 1 item co id = ' + req.params.id))
 // router.put('/edit/:id', (req, res, next) => res.send('Edit item ' + req.params.id))

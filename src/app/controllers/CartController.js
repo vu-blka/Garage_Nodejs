@@ -149,7 +149,7 @@ class CartController {
                                     Cart.updateOne({ cartId: param }, body)
                                         .then(() => {
                                             res.status(200).send(
-                                                'Sua don hang thanh cong'
+                                                'Sửa đơn hàng thành công'
                                             );
                                         })
                                         .catch((error) =>

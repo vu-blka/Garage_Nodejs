@@ -27,7 +27,7 @@ class ProductController {
         ]).exec(function (error, product) {
             Product.populate(product, {
                 path: 'manufacturerId productTypeId',
-                select: '-__v -_id',
+                select: '-__v',
             })
                 .then((p) => res.status(200).send(p))
                 .catch((error) => res.status(401).send(error));
@@ -237,6 +237,7 @@ class ProductController {
             res.status(401).send('Data rong');
         } else {
             const product = new Product(data);
+            product.productId = 15;
             product
                 .save()
                 .then((product) => {
@@ -252,14 +253,15 @@ class ProductController {
                             value.refId = id;
                             des = new Description(value);
                             des.save()
-                                .then(() =>
-                                    console.log('them description thanh cong')
-                                )
+                                .then(() => {
+                                    console.log('them description thanh cong');
+                                    //res.status(200).send(
+                                    //    'Thêm sản phẩm thành công'
+                                    //);
+                                })
                                 .catch((error) => res.status(401).send(error));
                         });
-                        res.status(200).send(
-                            'Them product thanh cong (co description)'
-                        );
+                        res.status(200).send('Thêm sản phẩm thành công!!');
                     }
                 })
                 .catch((error) => {
@@ -279,14 +281,16 @@ class ProductController {
                     if (count > 0) {
                         Product.delete({ productId: param })
                             .then(() => {
-                                res.status(200).send('Xoa san pham thanh cong');
+                                res.status(200).send('Xóa sản phẩm thành công');
                             })
                             .catch((error) =>
-                                res.status(401).send('Khong xoa duoc')
+                                res
+                                    .status(401)
+                                    .send('Đã xảy ra lỗi khi xóa sản phẩm')
                             );
                     } else {
                         res.status(401).send(
-                            'Khong co san pham nay hoac san pham da bi xoa'
+                            'Không có sản phẩm này hoặc sản phẩm đã bị xóa'
                         );
                     }
                 })
@@ -294,11 +298,11 @@ class ProductController {
         }
     }
 
-    //[UPDATE] /api/product/update/:id
+    //[UPDATE] /api/product/update
     update(req, res, next) {
-        const param = req?.params?.id;
+        const param = req?.body?.productId;
         if (!param) {
-            res.status(401).send('Khong co param');
+            res.status(401).send('Không có param (chưa truyền mã productId)');
         } else {
             const body = req?.body;
             Product.countDocuments({ productId: param }).then((count) => {
@@ -306,14 +310,14 @@ class ProductController {
                     if (JSON.stringify(body) !== '{}') {
                         Product.updateOne({ productId: param }, body)
                             .then(() => {
-                                res.status(200).send('Sua product thanh cong');
+                                res.status(200).send('Sửa sản phẩm thành công');
                             })
                             .catch((error) => res.status(401).send(error));
                     } else {
-                        res.status(401).send('Khong co du lieu body');
+                        res.status(401).send('Không có dữ liệu body');
                     }
                 } else {
-                    res.status(401).send('Khong co ma san pham nay');
+                    res.status(401).send('Không có mã sản phẩm này');
                 }
             });
         }
