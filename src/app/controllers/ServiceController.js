@@ -37,7 +37,7 @@ class ServiceController {
 
     // [GET] api/service/get-service-by-id
     async getServiceById(req, res, next) {
-        const param = req.query?.serviceId;
+        const param = parseInt(req.query?.serviceId);
         if (!param)
             res.status(401).send('Thieu param hoac ten param sai (serviceId)');
         else {
@@ -151,6 +151,7 @@ class ServiceController {
             res.status(401).send('Data rong');
         } else {
             const service = new Service(data);
+            service.afterPrice = data?.price;
             service
                 .save()
                 .then((service) => {
@@ -178,9 +179,7 @@ class ServiceController {
                                         res.status(401).send(error)
                                     );
                             });
-                            res.status(200).send(
-                                'Them service thanh cong (co description)'
-                            );
+                            res.status(200).send('Thêm dịch vụ thành công');
                         }
                     }
                 })

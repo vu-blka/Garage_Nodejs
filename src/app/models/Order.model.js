@@ -10,4 +10,4 @@ const Order = new Schema({
     createEmployeeId: { type: Schema.Types.ObjectId, ref: 'Employee' },
 });
 
-module.exports = Schema.model('Order', Order);
+module.exports = mongoose.model('Order', Order);

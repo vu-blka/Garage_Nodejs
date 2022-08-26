@@ -2,10 +2,11 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const Bill = {
-    cartId: { type: Schema.Types.ObjectId, ref: 'Cart' },
+    cart: { type: Schema.Types.ObjectId, ref: 'Cart' },
+    cartId: { type: Number },
     createAt: { type: Date },
     taxCode: { type: String },
-    createEmployeeId: { type: Schema.Types.ObjectId, ref: 'Employee' },
+    createEmployeeId: { type: Schema.Types.ObjectId, ref: 'User' },
 };
 
-module.exports = Schemal.model('Bill', Bill);
+module.exports = mongoose.model('Bill', Bill);

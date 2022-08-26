@@ -36,7 +36,7 @@ class ProductController {
 
     //  [GET] /api/product/get-product-by-id
     async getProductById(req, res, next) {
-        const param = req.query?.productId;
+        const param = parseInt(req.query?.productId);
         if (!param) {
             res.status(401).send('Khong co hoac thieu tham so (productId)');
         } else {
@@ -232,12 +232,20 @@ class ProductController {
 
     // [POST] /api/product/create
     create(req, res, next) {
+        //const data = req?.body;
+        //const product = new Product(data);
+        //product
+        //    .save()
+        //    .then(() => res.status(200).send('OK'))
+        //    .catch((error) => {
+        //        res.status(401).send(error);
+        //    });
         const data = req?.body;
         if (JSON.stringify(data) === '{}') {
             res.status(401).send('Data rong');
         } else {
             const product = new Product(data);
-            product.productId = 15;
+            product.afterPrice = data?.price;
             product
                 .save()
                 .then((product) => {
@@ -259,7 +267,9 @@ class ProductController {
                                     //    'Thêm sản phẩm thành công'
                                     //);
                                 })
-                                .catch((error) => res.status(401).send(error));
+                                .catch((error) => {
+                                    console.log(error);
+                                });
                         });
                         res.status(200).send('Thêm sản phẩm thành công!!');
                     }

@@ -17,6 +17,19 @@ class CartController {
             });
     }
 
+    //  [GET] /api/cart/get-all-with-delete
+    getAllWithDelete(req, res, next) {
+        Cart.findWithDeleted({})
+            .populate({ path: 'idUser', select: 'name' })
+            .populate({ path: 'statusId' })
+            .then((cart) => {
+                res.status(200).send(cart);
+            })
+            .catch((error) => {
+                res.status(401).send(error);
+            });
+    }
+
     //  [GET] /api/cart/get-cart-by-id
     getById(req, res, next) {
         const id = req?.query?.id;
@@ -84,7 +97,7 @@ class CartController {
                 .then((cart) => {
                     const cartId = cart._id;
                     cartDes.cartId = cartId;
-                    cartDes.products = products;	
+                    cartDes.products = products;
                     cartDes.services = services;
                     cartDes
                         .save()
@@ -94,12 +107,10 @@ class CartController {
                             );
                         })
                         .catch((error) => {
-                            console.log(error);
                             res.status(401).send(error);
                         });
                 })
                 .catch((error) => {
-                    console.log(error);
                     res.status(401).send(error);
                 });
         }

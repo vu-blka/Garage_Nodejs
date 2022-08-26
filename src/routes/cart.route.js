@@ -4,6 +4,7 @@ const cartController = require('../app/controllers/CartController');
 
 //GET
 router.get('/get-all', cartController.getAll);
+router.get('/get-all-with-delete', cartController.getAllWithDelete);
 router.get('/get-cart-by-id', cartController.getById);
 
 // POST

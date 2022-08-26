@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 const mongoose_delete = require('mongoose-delete');
 const Schema = mongoose.Schema;
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 const Cart = new Schema({
-    cartId: { type: String, unique: true },
+    cartId: { type: Number, unique: true },
     createAt: { type: Date },
     totalPrice: { type: Number },
     statusId: { type: Schema.Types.ObjectId, ref: 'Status' },
@@ -13,6 +14,7 @@ const Cart = new Schema({
     deletedAt: { type: String },
 });
 
+Cart.plugin(AutoIncrement, { inc_field: 'cartId' });
 Cart.plugin(
     mongoose_delete,
     { overrideMethods: 'all' },
